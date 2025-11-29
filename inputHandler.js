@@ -12,9 +12,9 @@ export class InputHandler {
         // document.addEventListener("click", e => {
         //     e.preventDefault()
         // })
-        document.addEventListener("touchstart", e => {
-            e.preventDefault()
-        },{passive: false})
+        // document.addEventListener("touchstart", e => {
+        //     e.preventDefault()
+        // },{passive: false})
         // document.addEventListener("touchend", e => {
         //     e.preventDefault()
         // },{passive: false})
@@ -23,20 +23,43 @@ export class InputHandler {
         this.rightButton = document.getElementById("right")
         this.rotateButton = document.getElementById("rotate")
         this.restartBtn = document.getElementById("restartBtn")
-
-        this.leftButton.addEventListener("click", () => this.input = "KeyA")
-        this.leftButton.addEventListener("touchstart", () => this.input = "KeyA")
-
-        this.rightButton.addEventListener("click", () => this.input = "KeyD")
-        this.rightButton.addEventListener("touchstart", () => this.input = "KeyD")
-
-        this.rotateButton.addEventListener("click", () => this.input = "KeyR")
-        this.rotateButton.addEventListener("touchstart", () => this.input = "KeyR")
-
-        this.restartBtn.addEventListener("click", () => this.input = "restart")
-        this.restartBtn.addEventListener("touchstart", () => this.input = "restart")
+        
+        this.addClickEvents()
+        this.addTouchEvents()
     }
     reset() {
         this.input = ''
+    }
+
+    addClickEvents() {
+        this.leftButton.addEventListener("click", () => this.input = "KeyA")
+        this.rightButton.addEventListener("click", () => this.input = "KeyD")
+        this.rotateButton.addEventListener("click", () => this.input = "KeyR")
+        this.restartBtn.addEventListener("click", () => this.input = "restart")
+    }
+    addTouchEvents() {
+        this.leftButton.addEventListener("touchstart", (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            this.input = "KeyA"
+        },{passive: false})
+
+        this.rightButton.addEventListener("touchstart", (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            this.input = "KeyD"
+        },{passive: false})
+
+        this.rotateButton.addEventListener("touchstart", (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            this.input = "KeyR"
+        },{passive: false})
+
+        this.restartBtn.addEventListener("touchstart", (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            this.input = "restart"
+        },{passive: false})
     }
 }

@@ -52,3 +52,18 @@
     left: calc(50% + 150px);
     top: calc(50% + 100px);
 }
+
+.controls {
+    position: absolute;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw;
+    bottom: 2vh;
+    border: 1px solid;
+}
+.controls button {
+    width: 30vw;
+    height: 5vh;
+}

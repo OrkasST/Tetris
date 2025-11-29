@@ -49,15 +49,6 @@ class Game {
         this.highScore = 0
         this.highScoreElement = document.getElementById("highScore")
 
-        this.restartBtn = document.getElementById("restartBtn")
-        this.restartBtn.addEventListener("click", () => {
-            if (this.loopId !== null) {
-                clearInterval(this.loopId)
-                this.loopId = null
-            }
-            this.init()
-        })
-
     } 
 
     init() {
@@ -84,6 +75,7 @@ class Game {
     }
 
     update() {
+        if (this.inputHandler.input == "restart") this._onRestartClicked()
         if (!this.falling) {
             this.falling = new FallingObject(SHAPES[this.nextShape], 1, this.centralX)
             this.nextShape = this._pickNextShape()
@@ -220,5 +212,13 @@ class Game {
     displayScore() {
         this.highScoreElement.innerText = this.highScore
         this.scoreElement.innerText = this.score
+    }
+
+    _onRestartClicked() {
+        if (this.loopId !== null) {
+                clearInterval(this.loopId)
+                this.loopId = null
+            }
+            this.init()
     }
 }

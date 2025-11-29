@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const heightEl = document.getElementById("measureHeight")
     showResolutions(widthEl, heightEl)
     window.addEventListener("resize", () => {
-        console.log("gvgrvgdkskvdg");
         showResolutions(widthEl, heightEl)
     })
     const tetris = new Game(document.getElementById("screen"), ["TimesNewRoman"])

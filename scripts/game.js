@@ -49,6 +49,9 @@ class Game {
         this.highScore = 0
         this.highScoreElement = document.getElementById("highScore")
 
+        this.awaitFrames = 3
+        this.currentFrame = 0
+
     } 
 
     init() {
@@ -59,7 +62,7 @@ class Game {
 
         this.nextShape = this._pickNextShape()
         this.drawUI()
-        this.loopId = setInterval(this.loop.bind(this), 200)
+        this.loopId = setInterval(this.loop.bind(this), 100)
     }
 
     loop() {
@@ -91,16 +94,24 @@ class Game {
         }
         let x = this.inputHandler.input == "KeyA" && this.falling.leftCorner > 0 ? -1 :
             this.inputHandler.input == "KeyD" && this.falling.rightCorner + 1 < this.fieldSize.x ? 1 : 0
+
+        if (x !== 0) this.moveFallingObject(0, x)
         
         if (this.inputHandler.input == "KeyR") {
             this.setFallingInField(true, true)
             this.falling.rotate()
         }
 
-        this.moveFallingObject(1, x)
-        if (this.isFallingLanded()) {
-            this.checkUpperLimit()
-            this.falling = null
+        if (this.currentFrame == this.awaitFrames) {
+            this.moveFallingObject(1, 0)
+            if (this.isFallingLanded()) {
+                this.checkUpperLimit()
+                this.falling = null
+            }
+            this.currentFrame = 0
+        } else {
+            this.currentFrame++
+            console.log('this.currentFrame: ', this.currentFrame);
         }
     }
 

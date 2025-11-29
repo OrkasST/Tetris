@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function showResolutions(widthEl, heightEl) {
-    widthEl.innerText = window.innerWidth
-    heightEl.innerText = window.innerHeight
+    widthEl.innerText = window.outerWidth
+    heightEl.innerText = window.outerHeight
 }
 
 class Game {

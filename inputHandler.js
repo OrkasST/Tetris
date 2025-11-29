@@ -9,7 +9,13 @@ export class InputHandler {
         // document.addEventListener("dblclick", e => {
         //     e.preventDefault()
         // })
-        document.addEventListener("click", e => {
+        // document.addEventListener("click", e => {
+        //     e.preventDefault()
+        // })
+        document.addEventListener("touchstart", e => {
+            e.preventDefault()
+        })
+        document.addEventListener("touchend", e => {
             e.preventDefault()
         })
 

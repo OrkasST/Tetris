@@ -1,0 +1,54 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main_canvas {
+    position: relative;
+}
+
+.side_canvas {
+    position: absolute;
+
+    left: calc(50% + 150px);
+    top: calc(50% - 200px);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.score {
+    position: absolute;
+
+    left: calc(50% + 150px);
+    top: calc(50%);
+
+    font-size: larger;
+    font-weight: bold;
+}
+
+.score span {
+    font-weight: lighter;
+}
+
+#restartBtn {
+    position: absolute;
+    width: 70px;
+    height: 40px;
+
+    font-size: larger;
+
+    left: calc(50% + 150px);
+    top: calc(50% + 100px);
+}

@@ -83,6 +83,9 @@
 .controls button {
     width: 30vw;
     height: 5vh;
+
+    background: #ffffff5f;
+    border: 1px solid #555454d0;
 }
 
 .measures{

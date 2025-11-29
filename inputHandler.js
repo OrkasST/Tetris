@@ -6,6 +6,8 @@ export class InputHandler {
             this.input = e.code
         })
 
+        document.addEventListener("dblclick", e => e.preventDefault())
+
         this.leftButton = document.getElementById("left")
         this.rightButton = document.getElementById("right")
         this.rotateButton = document.getElementById("rotate")

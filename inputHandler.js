@@ -5,19 +5,9 @@ export class InputHandler {
         this.eventListener = document.addEventListener("keypress", (e) => {
             this.input = e.code
         })
-
-        // document.addEventListener("dblclick", e => {
-        //     e.preventDefault()
-        // })
-        // document.addEventListener("click", e => {
-        //     e.preventDefault()
-        // })
-        // document.addEventListener("touchstart", e => {
-        //     e.preventDefault()
-        // },{passive: false})
-        // document.addEventListener("touchend", e => {
-        //     e.preventDefault()
-        // },{passive: false})
+        document.addEventListener("touchstart", e => {
+            e.preventDefault()
+        },{passive: false})
 
         this.leftButton = document.getElementById("left")
         this.rightButton = document.getElementById("right")

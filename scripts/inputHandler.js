@@ -1,3 +1,5 @@
+import { inputMap } from "./inputMap.js"
+
 export class InputHandler {
     constructor() {
         this.input = ''
@@ -22,34 +24,34 @@ export class InputHandler {
     }
 
     addClickEvents() {
-        this.leftButton.addEventListener("click", () => this.input = "KeyA")
-        this.rightButton.addEventListener("click", () => this.input = "KeyD")
-        this.rotateButton.addEventListener("click", () => this.input = "KeyR")
-        this.restartBtn.addEventListener("click", () => this.input = "restart")
+        this.leftButton.addEventListener("click", () => this.input = inputMap.LEFT)
+        this.rightButton.addEventListener("click", () => this.input = inputMap.RIGHT)
+        this.rotateButton.addEventListener("click", () => this.input = inputMap.ROTATE)
+        this.restartBtn.addEventListener("click", () => this.input = inputMap.RESTART)
     }
     addTouchEvents() {
         this.leftButton.addEventListener("touchstart", (e) => {
             e.preventDefault()
             e.stopPropagation()
-            this.input = "KeyA"
+            this.input = inputMap.LEFT
         },{passive: false})
 
         this.rightButton.addEventListener("touchstart", (e) => {
             e.preventDefault()
             e.stopPropagation()
-            this.input = "KeyD"
+            this.input = inputMap.RIGHT
         },{passive: false})
 
         this.rotateButton.addEventListener("touchstart", (e) => {
             e.preventDefault()
             e.stopPropagation()
-            this.input = "KeyR"
+            this.input = inputMap.ROTATE
         },{passive: false})
 
         this.restartBtn.addEventListener("touchstart", (e) => {
             e.preventDefault()
             e.stopPropagation()
-            this.input = "restart"
+            this.input = inputMap.RESTART
         },{passive: false})
     }
 }

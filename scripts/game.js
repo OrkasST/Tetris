@@ -2,6 +2,7 @@ import { Drawer } from "./drawer.js"
 import { FallingObject } from "./fallingObject.js"
 import { GameField } from "./GameField.js"
 import { InputHandler } from "./inputHandler.js"
+import { inputMap } from "./inputMap.js"
 import { logField } from "./logField.js"
 import { ScoreHandler } from "./scoreHandler.js"
 import { SHAPES } from "./shapes.js"
@@ -43,8 +44,9 @@ class Game {
         this.falling = null
 
         this._isGameOver = false
+        this._isGameStarted = false
 
-        this.awaitFrames = 3
+        this.awaitFrames = 30
         this.currentFrame = 0
 
         this.loopCount = 0
@@ -59,11 +61,15 @@ class Game {
 
         this.nextShape = this._pickNextShape()
         this.drawUI()
-        this.loopId = setInterval(this.loop.bind(this), 100)
+        this.loopId = setInterval(this.loop.bind(this), 1000 / 60)
     }
 
     loop() {
-        this.update()
+        if (!this._gameField.playStartAnimation(this._isGameStarted)) {
+            this._isGameStarted = true
+            this.update()
+        }
+        
         this.inputHandler.reset()
         this.drawUI()
         if (this._isGameOver) {
@@ -82,18 +88,16 @@ class Game {
 
             for (let y = 0; y < this._gameField.height; y++)
                 if (this._gameField.field[y].every(cell => cell !== 0)) {
-                    debugger
                     this.scoreHandler.updateScore(1)
                     this._gameField.eraseRow(y)
-                    this._gameField.moveRowsDownFrom(y)
                 }
         }
-        let x = this.inputHandler.input == "KeyA" && this.falling.leftCorner > 0 ? -1 :
-            this.inputHandler.input == "KeyD" && this.falling.rightCorner + 1 < this._gameField.width ? 1 : 0
+        let x = this.inputHandler.input == inputMap.LEFT && this.falling.leftCorner > 0 ? -1 :
+            this.inputHandler.input == inputMap.RIGHT && this.falling.rightCorner + 1 < this._gameField.width ? 1 : 0
 
         if (x !== 0) this.moveFallingObject(0, x)
         
-        if (this.inputHandler.input == "KeyR") {
+        if (this.inputHandler.input == inputMap.ROTATE) {
             this.setFallingInField(true, true)
             this.falling.rotate()
         }
@@ -211,4 +215,6 @@ class Game {
             }
             this.init()
     }
+
+
 }

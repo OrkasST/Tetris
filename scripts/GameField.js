@@ -12,6 +12,10 @@ export class GameField {
         this._centralXPoint = Math.floor((this._width - 1) / 2)
 
         this._field = null
+
+        this._isStartAnimationInProcess = false
+        this._startAnimationY = 0
+        this._startAnimationX = 0
     }
 
     get width() { return this._width }
@@ -35,6 +39,7 @@ export class GameField {
     eraseRow(row) {
         for (let x = 0; x < this._width; x++)
             this._field[row][x] = 0
+        this.moveRowsDownFrom(row)
     }
 
     moveRowsDownFrom(row) {
@@ -46,6 +51,47 @@ export class GameField {
                 }
             }
         }
+    }
+
+    playStartAnimation(isSkipped) {
+        if (isSkipped) return false
+
+        if (!this._isStartAnimationInProcess) this._beginStartAnimation()
+        this._field[this._startAnimationY][this._startAnimationX] = 1
+        this._field[this._startAnimationY][this._startAnimationX+1] = 1
+        this._updateAnimationPosition()
+        if (this._isAnimationComplete()) this._endStartAnimation()
+        return this._isStartAnimationInProcess
+    }
+
+    _beginStartAnimation() {
+        this._isStartAnimationInProcess = true
+    }
+
+    _updateAnimationPosition() {
+        this._startAnimationX += 2
+        if (this._startAnimationX >= this._width) {
+            this._startAnimationX = 0
+            this._startAnimationY += 1
+        }
+    }
+
+    _isAnimationComplete() {
+        return this._startAnimationY == this._height && this._startAnimationX == 0
+    }
+
+    _endStartAnimation() {
+        this._startAnimationY = 0
+        this._startAnimationX = 0
+
+        this._clearField()
+        this._isStartAnimationInProcess = false
+    }
+
+    _clearField() {
+        for (let y = 0; y < this._height; y++)
+            for (let x = 0; x < this._width; x++)
+                this._field[y][x] = 0
     }
 
 }

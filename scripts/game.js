@@ -48,12 +48,11 @@ class Game {
 
         this.awaitFrames = 30
         this.currentFrame = 0
-
-        this.loopCount = 0
     } 
 
     init() {
         this._gameField.generateField()
+        this._gameField.resetAnimationCount()
 
         this.falling = null
         this._isGameOver = false
@@ -61,28 +60,25 @@ class Game {
 
         this.nextShape = this._pickNextShape()
         this.drawUI()
+        this._isGameStarted = true
         this.loopId = setInterval(this.loop.bind(this), 1000 / 60)
     }
 
     loop() {
-        if (!this._gameField.playStartAnimation(this._isGameStarted)) {
-            this._isGameStarted = true
-            this.update()
-        }
+        if (!this._gameField.playStartAnimation()) this.update()
         
         this.inputHandler.reset()
         this.drawUI()
         if (this._isGameOver) {
-            clearInterval(this.loopId)
-            this.loopId = null
             this.gameOver()
         }
-        this.loopCount++
     }
 
     update() {
-        if (this.inputHandler.input == "restart") this._onRestartClicked()
+        if (this.inputHandler.input == "restart") return this._onRestartClicked()
+        if (!this._isGameStarted) return
         if (!this.falling) {
+            console.log("DFGHJKGFDSDFGKLKVCDVBFGNH");
             this.falling = new FallingObject(SHAPES[this.nextShape], 1, this._gameField.centralXPoint)
             this.nextShape = this._pickNextShape()
 
@@ -103,9 +99,7 @@ class Game {
         }
 
         if (this.currentFrame == this.awaitFrames) {
-            console.log(">>>MOVING FALLING");
             this.moveFallingObject(1, 0)
-            console.log(this._gameField.field);
 
             if (this.isFallingLanded()) {
                 this.checkUpperLimit()
@@ -183,6 +177,11 @@ class Game {
 
     gameOver() {
         this.drawer.gameOver()
+
+        if (!this._isGameStarted) return
+        this.nextShape = null
+        this._gameField.resetAnimationCount()
+        this._isGameStarted = false
     }
 
     checkUpperLimit() {
@@ -198,6 +197,7 @@ class Game {
     }
 
     drawNextShape() {
+        if (!this.nextShape) return
         let middle = this.predictFieldSize / 2
         SHAPES[this.nextShape][0].forEach(cell => {
             this.predictDrawer.filledRect(
@@ -209,12 +209,11 @@ class Game {
     }
 
     _onRestartClicked() {
+        this._isGameOver = false
         if (this.loopId !== null) {
                 clearInterval(this.loopId)
                 this.loopId = null
             }
             this.init()
     }
-
-
 }

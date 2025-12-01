@@ -16,6 +16,8 @@ export class GameField {
         this._isStartAnimationInProcess = false
         this._startAnimationY = 0
         this._startAnimationX = 0
+
+        this._timesPlayed = 0
     }
 
     get width() { return this._width }
@@ -53,9 +55,8 @@ export class GameField {
         }
     }
 
-    playStartAnimation(isSkipped) {
-        if (isSkipped) return false
-
+    playStartAnimation() {
+        if (this._timesPlayed > 0) return false
         if (!this._isStartAnimationInProcess) this._beginStartAnimation()
         this._field[this._startAnimationY][this._startAnimationX] = 1
         this._field[this._startAnimationY][this._startAnimationX+1] = 1
@@ -86,12 +87,17 @@ export class GameField {
 
         this._clearField()
         this._isStartAnimationInProcess = false
+        this._timesPlayed = 1
     }
 
     _clearField() {
         for (let y = 0; y < this._height; y++)
             for (let x = 0; x < this._width; x++)
                 this._field[y][x] = 0
+    }
+
+    resetAnimationCount() {
+        this._timesPlayed = 0
     }
 
 }

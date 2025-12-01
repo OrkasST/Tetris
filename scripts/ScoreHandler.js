@@ -3,6 +3,11 @@ export class ScoreHandler {
         this._score = 0
         this._highScore = 0
 
+        let memory = localStorage.getItem("tetris_highscore")
+        if (memory) this._highScore = Number(memory)
+
+        console.log('_highScore: ', typeof(this._highScore))
+
         this._scoreDisplay = document.getElementById("score")
         this._highScoreDisplay = document.getElementById("highScore")
     }
@@ -10,6 +15,9 @@ export class ScoreHandler {
     updateScore(scoreModifier) {
         this._score += scoreModifier
         if (this._highScore < this._score) this._highScore = this._score
+        
+        localStorage.clear();
+        localStorage.setItem("tetris_highscore", this._highScore);
     }
 
     showScore() {

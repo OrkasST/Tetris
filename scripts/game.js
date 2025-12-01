@@ -1,3 +1,4 @@
+    console.log("UPDATE 01.12.2025 10:46");
 import { Drawer } from "./drawer.js"
 import { FallingObject } from "./fallingObject.js"
 import { GameField } from "./GameField.js"
@@ -8,7 +9,6 @@ import { SHAPES } from "./shapes.js"
 
 document.addEventListener("DOMContentLoaded", () => {
     // let f = new FontFace("Limelight", 'url("https://fonts.googleapis.com/css2?family=Limelight&display=swap")')
-    console.log("UPDATE 01.12.2025 10:45");
     const widthEl = document.getElementById("measureWidth")
     const heightEl = document.getElementById("measureHeight")
     showResolutions(widthEl, heightEl)

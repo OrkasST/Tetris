@@ -1,5 +1,3 @@
-import { logField } from "./logField.js"
-
 export class GameField {
     constructor(height, width, cellSize) {
         this._width = width

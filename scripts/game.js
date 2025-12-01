@@ -1,10 +1,9 @@
 import { Drawer } from "./drawer.js"
-import { FallingObject } from "./fallingObject.js"
+import { FallingObject } from "./FallingObject.js"
 import { GameField } from "./GameField.js"
-import { InputHandler } from "./inputHandler.js"
+import { InputHandler } from "./InputHandler.js"
 import { inputMap } from "./inputMap.js"
-import { logField } from "./logField.js"
-import { ScoreHandler } from "./scoreHandler.js"
+import { ScoreHandler } from "./ScoreHandler.js"
 import { SHAPES } from "./shapes.js"
 
 document.addEventListener("DOMContentLoaded", () => {

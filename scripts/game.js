@@ -1,6 +1,7 @@
-import { Drawer } from "./drawer.js"
+import { Drawer } from "./Drawer.js"
 import { FallingObject } from "./fallingObject.js"
-import { InputHandler } from "./inputHandler.js"
+import { InputHandler } from "./InputHandler.js"
+import { ScoreHandler } from "./ScoreHandler.js"
 import { SHAPES } from "./shapes.js"
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -37,17 +38,13 @@ class Game {
         this.nextShape = null
 
         this.inputHandler = new InputHandler()
+        this.scoreHandler = new ScoreHandler()
 
         this.falling = null
 
         this._isGameOver = false
 
         this.centralX = Math.floor((this.fieldSize.x - 1) / 2)
-
-        this.score = 0
-        this.scoreElement = document.getElementById("score")
-        this.highScore = 0
-        this.highScoreElement = document.getElementById("highScore")
 
         this.awaitFrames = 3
         this.currentFrame = 0
@@ -58,7 +55,7 @@ class Game {
         this.gameField = this._generateField()
         this.falling = null
         this._isGameOver = false
-        this.score = 0
+        this.scoreHandler.resetScore()
 
         this.nextShape = this._pickNextShape()
         this.drawUI()
@@ -72,7 +69,6 @@ class Game {
         if (this._isGameOver) {
             clearInterval(this.loopId)
             this.loopId = null
-            console.log('this.loopId: ', this.loopId);
             this.gameOver()
         }
     }
@@ -85,9 +81,7 @@ class Game {
 
             for (let y = 0; y < this.fieldSize.y; y++)
                 if (this.gameField[y].every(cell => cell !== 0)) {
-                    console.log("FFFF");
-                    this.score += 1
-                    if (this.score > this.highScore) this.highScore = this.score
+                    this.scoreHandler.updateScore(1)
                     this.eraseRow(y)
                     this.moveRowsDownFrom(y)
                 }
@@ -111,7 +105,6 @@ class Game {
             this.currentFrame = 0
         } else {
             this.currentFrame++
-            console.log('this.currentFrame: ', this.currentFrame);
         }
     }
 
@@ -139,7 +132,7 @@ class Game {
         this.predictDrawer.clear()
         this.drawNextShape()
 
-        this.displayScore()
+        this.scoreHandler.showScore()
     }
 
     drawField() {
@@ -218,11 +211,6 @@ class Game {
                 "#000000"
             )
         })
-    }
-
-    displayScore() {
-        this.highScoreElement.innerText = this.highScore
-        this.scoreElement.innerText = this.score
     }
 
     _onRestartClicked() {

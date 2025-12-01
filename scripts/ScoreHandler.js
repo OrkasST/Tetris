@@ -16,4 +16,8 @@ export class ScoreHandler {
         this._scoreDisplay.innerText = this._score
         this._highScoreDisplay.innerText = this._highScore
     }
+
+    resetScore() {
+        this._score = 0
+    }
 }

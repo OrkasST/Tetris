@@ -1,6 +1,8 @@
 import { Drawer } from "./drawer.js"
 import { FallingObject } from "./fallingObject.js"
+import { GameField } from "./GameField.js"
 import { InputHandler } from "./inputHandler.js"
+import { logField } from "./logField.js"
 import { ScoreHandler } from "./scoreHandler.js"
 import { SHAPES } from "./shapes.js"
 
@@ -23,17 +25,15 @@ function showResolutions(widthEl, heightEl) {
 
 class Game {
     constructor(canvasElement, fonts) {
-        this.fieldSize = { y: 16, x: 8 }
-        this.gameField = null
+        this._gameField = new GameField(16, 8, 32)
         
-        this.cellSize = 32
         this.colors = ["#ff0000", "#eae30dff", "#1441beff"]
 
-        this.drawer = new Drawer(canvasElement, this.cellSize * this.fieldSize.x, this.cellSize * this.fieldSize.y)
+        this.drawer = new Drawer(canvasElement, this._gameField.canvasWidth, this._gameField.canvasHeigth)
         this.drawer.setFonts(fonts)
 
-        this.predictDrawerCell = this.cellSize / 3
-        this.predictFieldSize = this.predictDrawerCell * this.fieldSize.x
+        this.predictDrawerCell = this._gameField.cellSize / 3
+        this.predictFieldSize = this.predictDrawerCell * this._gameField.width
         this.predictDrawer = new Drawer(document.getElementById("predictscreen"), this.predictFieldSize, this.predictFieldSize)
         this.nextShape = null
 
@@ -44,15 +44,15 @@ class Game {
 
         this._isGameOver = false
 
-        this.centralX = Math.floor((this.fieldSize.x - 1) / 2)
-
         this.awaitFrames = 3
         this.currentFrame = 0
 
+        this.loopCount = 0
     } 
 
     init() {
-        this.gameField = this._generateField()
+        this._gameField.generateField()
+
         this.falling = null
         this._isGameOver = false
         this.scoreHandler.resetScore()
@@ -71,23 +71,25 @@ class Game {
             this.loopId = null
             this.gameOver()
         }
+        this.loopCount++
     }
 
     update() {
         if (this.inputHandler.input == "restart") this._onRestartClicked()
         if (!this.falling) {
-            this.falling = new FallingObject(SHAPES[this.nextShape], 1, this.centralX)
+            this.falling = new FallingObject(SHAPES[this.nextShape], 1, this._gameField.centralXPoint)
             this.nextShape = this._pickNextShape()
 
-            for (let y = 0; y < this.fieldSize.y; y++)
-                if (this.gameField[y].every(cell => cell !== 0)) {
+            for (let y = 0; y < this._gameField.height; y++)
+                if (this._gameField.field[y].every(cell => cell !== 0)) {
+                    debugger
                     this.scoreHandler.updateScore(1)
-                    this.eraseRow(y)
-                    this.moveRowsDownFrom(y)
+                    this._gameField.eraseRow(y)
+                    this._gameField.moveRowsDownFrom(y)
                 }
         }
         let x = this.inputHandler.input == "KeyA" && this.falling.leftCorner > 0 ? -1 :
-            this.inputHandler.input == "KeyD" && this.falling.rightCorner + 1 < this.fieldSize.x ? 1 : 0
+            this.inputHandler.input == "KeyD" && this.falling.rightCorner + 1 < this._gameField.width ? 1 : 0
 
         if (x !== 0) this.moveFallingObject(0, x)
         
@@ -97,7 +99,10 @@ class Game {
         }
 
         if (this.currentFrame == this.awaitFrames) {
+            console.log(">>>MOVING FALLING");
             this.moveFallingObject(1, 0)
+            console.log(this._gameField.field);
+
             if (this.isFallingLanded()) {
                 this.checkUpperLimit()
                 this.falling = null
@@ -105,22 +110,6 @@ class Game {
             this.currentFrame = 0
         } else {
             this.currentFrame++
-        }
-    }
-
-    eraseRow(row) {
-        for (let x = 0; x < this.fieldSize.x; x++)
-            this.gameField[row][x] = 0
-    }
-
-    moveRowsDownFrom(row) {
-        for (let y = row; y > 0; y--) {
-            for (let x = 0; x < this.fieldSize.x; x++) {
-                if (this.gameField[y - 1][x] !== 0) {
-                    this.gameField[y][x] = this.gameField[y - 1][x]
-                    this.gameField[y - 1][x] = 0
-                }
-            }
         }
     }
 
@@ -136,27 +125,37 @@ class Game {
     }
 
     drawField() {
-        for (let y = 0; y < this.fieldSize.y; y++)
-            for (let x = 0; x < this.fieldSize.y; x++)
-                this.drawer.strokedRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize, "#000")
+        for (let y = 0; y < this._gameField.height; y++)
+            for (let x = 0; x < this._gameField.width; x++)
+                this.drawer.strokedRect(
+                    x * this._gameField.cellSize, y * this._gameField.cellSize,
+                    this._gameField.cellSize, this._gameField.cellSize,
+                    "#000"
+                )
     }
     drawObjects() {
-        for (let y = 0; y < this.fieldSize.y; y++)
-            for (let x = 0; x < this.fieldSize.y; x++)
-                if (this.gameField[y][x] !== 0)
-                    this.drawer.filledRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize, this.colors[this.gameField[y][x] - 1])
+        for (let y = 0; y < this._gameField.height; y++)
+            for (let x = 0; x < this._gameField.width; x++)
+                if (this._gameField.field[y][x] !== 0)
+                    this.drawer.filledRect(
+                x * this._gameField.cellSize, y * this._gameField.cellSize,
+                this._gameField.cellSize, this._gameField.cellSize,
+                this.colors[this._gameField.field[y][x] - 1]
+            )
     }
 
     moveFallingObject(y = 1, x = 0) {
         this.falling.move(y, x)
+
         this.setFallingInField()
+
         this.setFallingInField(false)
     }
 
     setFallingInField(remove = true, current = false) {
         this.chooseFallingObjectShape(!remove || current).forEach((cell, i, arr) => {
             if (this._isCellInField(cell))
-                this.gameField[cell[0]][cell[1]] = remove ? 0 : this.falling.colorId
+                this._gameField.field[cell[0]][cell[1]] = remove ? 0 : this.falling.colorId
         })
     }
 
@@ -165,16 +164,18 @@ class Game {
     }
 
     isFallingLanded() {
-        if (this.falling.y + 1 == this.fieldSize.y) return true
+        if (this.falling.y + 1 == this._gameField.height) return true
         let isLanded = false
         this.falling.shape.forEach(
             (cell, i) => {
-                if (this._isCellInField([cell[0] + 1]) && this.gameField[cell[0] + 1][cell[1]] > 0 && !this.falling.checkSelfCollision(cell[0] + 1, cell[1])) isLanded = true
+                if (this._isCellInField([cell[0] + 1]) && this._gameField.field[cell[0] + 1][cell[1]] > 0 && !this.falling.checkSelfCollision(cell[0] + 1, cell[1])) isLanded = true
             })
         return isLanded
     }
 
-    _isCellInField(cell) { return cell[0] >= 0 && cell[0] < this.fieldSize.y }
+    _isCellInField(cell) {
+        return cell[0] >= 0 && cell[0] < this._gameField.height
+    }
 
     gameOver() {
         this.drawer.gameOver()
@@ -188,16 +189,6 @@ class Game {
         this.drawer.setFont(font)
     }
 
-    _generateField() {
-        let field = []
-        for (let y = 0; y < this.fieldSize.y; y++) {
-            field.push([])
-            for (let x = 0; x < this.fieldSize.x; x++) {
-                field[y].push(0)
-            }
-        }
-        return field
-    }
     _pickNextShape() {
         return Math.floor(Math.random() * Object.keys(SHAPES).length) + ''
     }

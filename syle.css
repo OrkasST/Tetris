@@ -37,7 +37,6 @@
     position: absolute;
 
     left: calc(50% + 150px);
-    /* top: calc(50% - 200px); */
 
     display: flex;
     flex-direction: column;
@@ -46,11 +45,6 @@
 }
 
 .score {
-    /* position: absolute;
-
-    left: calc(50% + 150px);
-    top: calc(50%); */
-
     font-size: larger;
     font-weight: bold;
 }
@@ -60,14 +54,10 @@
 }
 
 #restartBtn {
-    /* position: absolute; */
     width: 70px;
     height: 40px;
 
     font-size: larger;
-
-    /* left: calc(50% + 150px);
-    top: calc(50% + 100px); */
 }
 
 .controls {
@@ -83,12 +73,6 @@
 .controls button {
     width: 30vw;
     height: 5vh;
-}
-
-.measures{
-    position: absolute;
-    left: 1rem;
-    top: 1rem;
 }
 
 #restartBtn {

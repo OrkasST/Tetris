@@ -8,20 +8,9 @@ import { SHAPES } from "./shapes.js"
 
 document.addEventListener("DOMContentLoaded", () => {
     // let f = new FontFace("Limelight", 'url("https://fonts.googleapis.com/css2?family=Limelight&display=swap")')
-    const widthEl = document.getElementById("measureWidth")
-    const heightEl = document.getElementById("measureHeight")
-    showResolutions(widthEl, heightEl)
-    window.addEventListener("resize", () => {
-        showResolutions(widthEl, heightEl)
-    })
     const tetris = new Game(document.getElementById("screen"), ["TimesNewRoman"])
     tetris.init()
 })
-
-function showResolutions(widthEl, heightEl) {
-    widthEl.innerText = window.outerWidth
-    heightEl.innerText = window.outerHeight
-}
 
 class Game {
     constructor(canvasElement, fonts) {

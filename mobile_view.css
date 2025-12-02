@@ -63,7 +63,7 @@
     }
 }
 
-@media screen and (min-width: 380px) and (min-height: 651px) and (max-height: 900px) {
+@media screen and (min-width: 380px) and (max-width: 760px) and (min-height: 651px) and (max-height: 900px) {
     .side_canvas {
         left: 50%;
         transform: translate(-50%);

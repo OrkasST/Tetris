@@ -13,6 +13,8 @@ export class FallingObject {
         this._findCorners()
 
         this._tempShape = [...this.shape]
+
+        this.isLanded = false
     }
 
     _findCorners() {

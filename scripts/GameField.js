@@ -69,7 +69,7 @@ export class GameField {
 
     _updateAnimationPosition() {
         this._startAnimationX += 2
-        if (this._startAnimationX >= this._width) {
+        if (this._startAnimationX > this._width) {
             this._startAnimationX = 0
             this._startAnimationY += 1
         }
@@ -96,6 +96,36 @@ export class GameField {
 
     resetAnimationCount() {
         this._timesPlayed = 0
+    }
+
+    draw(fillRect, strokeRect, colors) {
+        for (let y = 0; y < this.height; y++)
+            for (let x = 0; x < this.width; x++)
+                if (this._field[y][x] !== 0)
+                    fillRect(
+                        x * this._cellSize, y * this._cellSize,
+                        this._cellSize, this._cellSize,
+                        colors[this._field[y][x] - 1]
+                    )
+                
+        for (let y = 0; y < this.height; y++)
+            for (let x = 0; x < this.width; x++)
+                strokeRect(
+                    x * this._cellSize, y * this._cellSize,
+                    this._cellSize, this._cellSize,
+                    "#000"
+                )
+    }
+
+    drawObjects() {
+        for (let y = 0; y < this._height; y++)
+            for (let x = 0; x < this._width; x++)
+                if (this._field[y][x] !== 0)
+                    this.drawer.filledRect(
+                x * this._cellSize, y * this._cellSize,
+                this._cellSize, this._cellSize,
+                this.colors[this._field[y][x] - 1]
+            )
     }
 
 }

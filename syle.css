@@ -76,20 +76,36 @@
     width: 100vw;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     gap: 2vw;
     bottom: 2vh;
 }
 .controls button {
     width: 30vw;
     height: 5vh;
-
-    background: #ffffff5f;
-    border: 1px solid #555454d0;
 }
 
 .measures{
     position: absolute;
     left: 1rem;
     top: 1rem;
+}
+
+#restartBtn {
+    min-width: 12vw;
+    border-radius: 2vw;
+    background: #ffffff5f;
+}
+
+#restartBtn, .controls button {
+    border:solid 1px #000;
+    background: #ffffff5f;
+    border-radius: 2vw;
+    box-shadow: 0 0 0.4rem 0.05rem #4545459b;
+}
+
+#restartBtn:active, button:active {
+    border:solid 1px #f50000;
+    box-shadow: none;
+    transform: scale(0.95);
 }

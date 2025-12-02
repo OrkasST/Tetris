@@ -13,11 +13,11 @@ export class Drawer {
         this.ctx.reset()
     }
 
-    filledRect(x,y, width,height, color) {
+    filledRect() { return (x,y, width,height, color) =>
         this._rect(x,y,width,height, null,color)
     }
 
-    strokedRect(x,y, width,height, color) {
+    strokedRect()  { return (x,y, width,height, color) => 
         this._rect(x,y,width,height, color, null)
     }
 

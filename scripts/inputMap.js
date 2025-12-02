@@ -3,4 +3,5 @@ export const inputMap = {
     RIGHT: "KeyD",
     ROTATE: "KeyR",
     RESTART: "restart",
+    BOOST: "KeyQ"
 }

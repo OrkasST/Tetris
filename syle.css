@@ -75,21 +75,22 @@
     height: 5vh;
 }
 
-#restartBtn {
+.restartBtn {
     min-width: 12vw;
     border-radius: 2vw;
     background: #ffffff5f;
 }
 
-#restartBtn, .controls button {
+.ui_button {
     border:solid 1px #000;
     background: #ffffff5f;
     border-radius: 2vw;
     box-shadow: 0 0 0.4rem 0.05rem #4545459b;
 }
 
-#restartBtn:active, button:active {
+.activated_btn {
     border:solid 1px #f50000;
     box-shadow: none;
     transform: scale(0.95);
+    color: #f50000;
 }

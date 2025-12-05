@@ -20,9 +20,6 @@ export class InputHandler {
         this._addBtnEvents()
 
         this._continuousEvent = ''
-        
-        // this.addClickEvents()
-        // this.addTouchEvents()
     }
     reset() {
         this.input = this._continuousEvent
@@ -40,62 +37,27 @@ export class InputHandler {
         btn.addEventListener("mousedown", () => {
             this.input = key
             if (isContinuous) this._continuousEvent = key
+            btn.classList.add("activated_btn")
         })
         btn.addEventListener("touchstart", (e) => {
             e.preventDefault()
             e.stopPropagation()
             this.input = key
             if (isContinuous) this._continuousEvent = key
+            btn.classList.add("activated_btn")
         },{passive: false})
         
-        if (isContinuous) {
-            btn.addEventListener("mouseup", () => this._continuousEvent = "" )
+        
+            btn.addEventListener("mouseup", () => {
+                if (isContinuous) this._continuousEvent = ""
+                btn.classList.remove("activated_btn")
+            })
             btn.addEventListener("touchend", (e) => {
                 e.preventDefault()
                 e.stopPropagation()
                 this._continuousEvent = ""
-                console.log('this._continuousEvent: ', this._continuousEvent);
+                btn.classList.remove("activated_btn")
             },{passive: false})
-        }
-    }
-
-    addClickEvents() {
-        this.leftButton.addEventListener("click", () => this.input = inputMap.LEFT)
-        this.rightButton.addEventListener("click", () => this.input = inputMap.RIGHT)
-        this.rotateButton.addEventListener("click", () => this.input = inputMap.ROTATE)
-        this.boostBtn.addEventListener("click", () => this.input = inputMap.BOOST)
-
-        this.restartBtn.addEventListener("click", () => this.input = inputMap.RESTART)
-    }
-    addTouchEvents() {
-        this.leftButton.addEventListener("touchstart", (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            this.input = inputMap.LEFT
-        },{passive: false})
-
-        this.rightButton.addEventListener("touchstart", (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            this.input = inputMap.RIGHT
-        },{passive: false})
-
-        this.rotateButton.addEventListener("touchstart", (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            this.input = inputMap.ROTATE
-        },{passive: false})
-
-        this.boostBtn.addEventListener("touchstart", (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            this.input = inputMap.BOOST
-        },{passive: false})
-
-        this.restartBtn.addEventListener("touchstart", (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            this.input = inputMap.RESTART
-        },{passive: false})
+        
     }
 }

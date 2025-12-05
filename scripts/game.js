@@ -53,6 +53,7 @@ class Game {
     }
 
     loop() {
+        console.log("GG");
         if (!this._gameField.playStartAnimation()) this.update()
         
         this.inputHandler.reset()
@@ -79,16 +80,14 @@ class Game {
 
         if (x !== 0) this.moveFallingObject(0, x)
         
-        if (this.inputHandler.input == inputMap.ROTATE) {
-            this.setFallingInField(true, true)
-            this.falling.rotate()
-        }
+        if (this.inputHandler.input == inputMap.ROTATE) this.rotateFallingObject()
 
         if (this.inputHandler.input == inputMap.BOOST) this.currentFrame += Math.floor(this.awaitFrames/1.7)
 
         if (this.currentFrame >= this.awaitFrames) {
 
             if (this.isFallingLanded()) {
+                let landed = this.falling.isLanded
                 if (this.falling.isLanded) this.falling = null
                 this.checkUpperLimit()
                 if (this.falling) this.falling.isLanded = true
@@ -109,6 +108,12 @@ class Game {
         this.drawNextShape()
 
         this.scoreHandler.showScore()
+    }
+
+    rotateFallingObject() {
+        this.setFallingInField(true, true)
+        this.falling.rotate()
+        this.setFallingInField(false)
     }
 
     moveFallingObject(y = 1, x = 0) {

@@ -106,7 +106,6 @@ class Game {
         this.drawer.clear()
         this._gameField.draw(this.drawer.filledRect(), this.drawer.strokedRect(), this.colors)
 
-        this.predictDrawer.clear()
         this.drawNextShape()
 
         this.scoreHandler.showScore()
@@ -167,6 +166,7 @@ class Game {
     }
 
     drawNextShape() {
+        this.predictDrawer.clear()
         if (!this.nextShape) return
         let middle = this.predictFieldSize / 2
         SHAPES[this.nextShape][0].forEach(cell => {

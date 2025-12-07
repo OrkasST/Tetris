@@ -25,8 +25,7 @@ export class FallingObject {
     }
 
     move(y,x) {
-        this._tempShape = this.shape.map(cell => [...cell])
-
+        this._saveCurrentShape()
         this._setValues(y,x)
 
         for (let cell = 0; cell < this.shape.length; cell++) {
@@ -70,6 +69,15 @@ export class FallingObject {
         this.shape = this._rotations[this._rotation].map(cell => [cell[0]+this.y, cell[1]+this.x])
         this._findCorners()
     }
+
+    resetRotation() {
+        if (this._rotation == 1) this._rotation = this._rotations.length - 1
+        else if (this._rotation == 0) this._rotation = this._rotations.length - 2
+        else this._rotation -= 2
+        this.rotate()
+    }
+
+    _saveCurrentShape() { this._tempShape = this.shape.map(cell => [...cell]) }
 
     get tempShape() { return this._tempShape }
     get upperCorner() { return this._upperCorner }

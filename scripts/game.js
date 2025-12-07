@@ -53,7 +53,6 @@ class Game {
     }
 
     loop() {
-        console.log("GG");
         if (!this._gameField.playStartAnimation()) this.update()
         
         this.inputHandler.reset()
@@ -111,8 +110,10 @@ class Game {
     }
 
     rotateFallingObject() {
+        if(!this.falling) return
         this.setFallingInField(true, true)
         this.falling.rotate()
+        if (this.isRotatedColliding()) this.falling.resetRotation()
         this.setFallingInField(false)
     }
 
@@ -133,6 +134,14 @@ class Game {
 
     chooseFallingObjectShape(current = true) {
         return current ? this.falling.shape : this.falling.tempShape
+    }
+
+    isRotatedColliding() {
+        for (let i = 0; i < this.falling.shape.length; i++) {
+            if (this.falling.shape[i][0] < 0) continue
+            if (this.falling.shape[i][1] < 0 || this._gameField.field[this.falling.shape[i][0]][this.falling.shape[i][1]] > 0) return true
+        }
+        return false
     }
 
     isFallingLanded() {
